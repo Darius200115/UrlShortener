@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable, subscribeOn, tap } from 'rxjs';
 import { LoginRequest, LoginResult } from '../shared/loginResult';
@@ -20,6 +20,7 @@ export class UrlShortener {
     longUrl: '',
     code: '',
     createdDate: new Date(),
+    user: new User()
   };
 
   public token = '';
@@ -42,9 +43,19 @@ export class UrlShortener {
     );
   }
 
+  loadUrlById(id:number) : Observable<UrlDetail>{
+    return this.http.get<UrlDetail>('api/url/GetUrlById/' + id).pipe(
+      tap(_=>console.log(`get url id=${id}`))
+      );    
+  }
+
   getShortUrl(url: UrlDetail) {
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      `Bearer ${this.token}`
+    );
     console.log('from service before post', url);
-    return this.http.post<any>('/api/url', url).pipe(
+    return this.http.post<any>('/api/url/Test', url, { headers: headers }).pipe(
       tap((data) => {
         console.log('from service after post', data);
         this._code$.next(data);
@@ -75,7 +86,7 @@ export class UrlShortener {
   }
 
   registration(user: User) {
-    return this.http.post<User>("/api/account/registration", user).pipe(
+    return this.http.post<User>('/api/account/registration', user).pipe(
       map(() => {
         this.newUser = new User();
       })

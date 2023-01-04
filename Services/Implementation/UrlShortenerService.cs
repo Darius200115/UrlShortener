@@ -1,4 +1,5 @@
-﻿using UrlShortener.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using UrlShortener.Data;
 using UrlShortener.Data.Entities;
 using UrlShortener.Services.Interfaces;
 
@@ -11,6 +12,18 @@ namespace UrlShortener.Services.Implementation
         public UrlShortenerService(AppDbContext context)
         {
             _context = context;
+        }
+
+        public string GenerateShortUrlAsync(string longUrl)
+        {
+            string code =  GenerateCode();
+            while (_context.UrlDetails.ToList().Where(x => x.Code == code).Any())
+            {
+                code = GenerateCode();
+            }   
+
+            return code;
+
         }
 
         public string GenerateShortUrl(string longUrl)
@@ -54,7 +67,17 @@ namespace UrlShortener.Services.Implementation
 
         public UrlDetail GetUrlById(int id)
         {
-            return _context.UrlDetails.Where(u => u.Id == id).FirstOrDefault();
+            return _context.UrlDetails.Include(p=>p.User).Where(u => u.Id == id).FirstOrDefault()!;
+        }
+
+        public void AddEntity(object model)
+        {
+            _context.Add(model);
+        }
+
+        public bool SaveAll()
+        {
+            return _context.SaveChanges() > 0;
         }
     }
 }

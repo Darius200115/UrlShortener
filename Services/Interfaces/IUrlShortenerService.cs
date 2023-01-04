@@ -7,7 +7,10 @@ namespace UrlShortener.Services.Interfaces
         string RedirectToOriginalUrl(string code);
         string GenerateShortUrl(string longUrl);
         string GenerateCode();
+        string GenerateShortUrlAsync(string longUrl);
         IEnumerable<UrlDetail> GetUrls();
         UrlDetail GetUrlById(int id);
+        void AddEntity(object model);
+        bool SaveAll();
     }
 }

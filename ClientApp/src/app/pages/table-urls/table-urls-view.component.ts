@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { UrlShortener } from 'src/app/services/url.service';
 
 @Component({
@@ -8,11 +9,18 @@ import { UrlShortener } from 'src/app/services/url.service';
 })
 export default class TableUrlsViewComponent implements OnInit {
 
-  constructor(public urlsService: UrlShortener) {}
+  constructor(public urlsService: UrlShortener,public router:Router) {}
 
   page: number = 1;
   ngOnInit(): void {
     this.urlsService.loadUrls().subscribe(() => {});
   }
 
+  urlById(id:number){
+    this.urlsService.loadUrlById(id).subscribe({
+      next: ()=> {
+        this.router.navigate(['/moreInfo'])
+      }
+    })
+  }
 }
