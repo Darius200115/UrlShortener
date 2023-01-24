@@ -2,6 +2,7 @@
 using UrlShortener.Data;
 using UrlShortener.Data.Entities;
 using UrlShortener.Services.Interfaces;
+using UrlShortener.ViewModels;
 
 namespace UrlShortener.Services.Implementation
 {
@@ -65,6 +66,8 @@ namespace UrlShortener.Services.Implementation
             return _context.UrlDetails.OrderBy(p => p.Id).ToList();
         }
 
+        
+
         public UrlDetail GetUrlById(int id)
         {
             return _context.UrlDetails.Include(p=>p.User).Where(u => u.Id == id).FirstOrDefault()!;
@@ -78,6 +81,11 @@ namespace UrlShortener.Services.Implementation
         public bool SaveAll()
         {
             return _context.SaveChanges() > 0;
+        }
+
+        public async Task<List<UrlDetail>> GetUrlsAsync()
+        {
+            return await _context.UrlDetails.OrderBy(p => p.Id).ToListAsync();
         }
     }
 }

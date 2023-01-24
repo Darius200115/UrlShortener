@@ -37,7 +37,7 @@ namespace UrlShortener.Controllers
         {
             var longUrl = _urlShortenerService.RedirectToOriginalUrl(code);
 
-            return Json(new { longUrl });
+            return Json(new { longUrl } );
 
         }
 
@@ -46,7 +46,7 @@ namespace UrlShortener.Controllers
         {
             try
             {
-                return Ok(_urlShortenerService.GetUrls());
+                return Ok(_urlShortenerService.GetUrls());                                                                                                                                                                                             
             }
             catch (Exception ex)
             {
@@ -129,6 +129,22 @@ namespace UrlShortener.Controllers
             {
                 _logger.LogError($"Failed to get url {ex}");
                 return BadRequest("Failed to get url");
+            }
+        }
+
+        [HttpGet]
+        [Route("GetAllUrl")]
+        public async Task<IActionResult> GetUrlAsync()
+        {
+            try
+            {
+                return Ok(await _urlShortenerService.GetUrlsAsync());
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError($"Failed to get urls: {ex}");
+                return BadRequest("Failed to get urls");
             }
         }
       

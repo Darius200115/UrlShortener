@@ -8,6 +8,6 @@ namespace UrlShortener.ViewModels
         public string? LongUrl { get; set; }
         public string? Code { get; set; }
         public DateTime CreatedDate { get; set; }
-        public SendUserViewModel User { get; set; }
+        public AppUser User { get; set; }
     }
 }

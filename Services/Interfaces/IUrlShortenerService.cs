@@ -9,6 +9,7 @@ namespace UrlShortener.Services.Interfaces
         string GenerateCode();
         string GenerateShortUrlAsync(string longUrl);
         IEnumerable<UrlDetail> GetUrls();
+        Task<List<UrlDetail>> GetUrlsAsync();
         UrlDetail GetUrlById(int id);
         void AddEntity(object model);
         bool SaveAll();
